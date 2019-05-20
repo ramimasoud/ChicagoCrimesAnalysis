@@ -1,0 +1,106 @@
+@page
+@model YearlyDeviationModel
+@{
+  ViewData["Title"] = "Yearly Deviation Overview";
+}
+
+<h2>Is Your Area... Getting Safer? Staying Steady? or will you Stay Away?</h2>  
+<h4>Compare and contrast the year to year changing crime rates within your selected area.</h4>
+
+@foreach (var item in Model.NetCrimeList) 
+{
+    <td>  
+       For Area # @item.Area (@item.AreaName)
+    </td> 
+    <td>  
+       ***Bigger Negative Deviaton = GOOD
+    </td> 
+    <td>
+       ***Bigger Positive Deviaton = BAD
+    </td> 
+    break;
+}
+
+@{
+   if (@Model.EX != null)
+	 {
+	   <br />
+		 <br />
+		 <h3>**ERROR: @Model.EX.Message</h3>
+		 <br />
+		 <hr />
+		 <br />
+		 <br />
+	 }
+}
+
+<table class="table">  
+    <thead>  
+        <tr>  
+            <th>  
+                Year
+            </th>  
+            <th>  
+                Number of Crimes
+            </th>  
+            <th> 
+                Deviation from Last Year
+            </th>  
+            <th>  
+                Deviation from AVG of All Years
+            </th>  
+        </tr>  
+    </thead>  
+    <tbody>  
+			
+        @{
+            int previousYear = 0; 
+            string na = "N/A";
+            int numYears = 0;
+            string err = "Sorry, your input does not exist within the database.";
+        }
+        @foreach (var item in Model.NetCrimeList)  
+        {  
+            numYears++;
+        }
+        @{
+            if(numYears == 0)
+            {
+                @(err)
+            }
+         }
+        
+        
+        @foreach (var item in Model.NetCrimeList)  
+        {  
+            <tr>  
+                <td>  
+					@item.Year
+                </td> 
+                <td>  
+                    @item.CrimesPerYear
+                </td>  
+                <td>  
+                    @{
+                        if(previousYear == 0)
+                        {
+                            @(na)
+                        }
+                        else
+                        {
+                            @((@item.CrimesPerYear)-(previousYear))
+                        }
+                    }
+                    @{
+                        previousYear = (@item.CrimesPerYear);
+                    }
+                </td>  
+                <td>  
+                    @((@item.CrimesPerYear)-((@item.TotalAreaCrimes)/(numYears)))
+                </td>  
+            </tr>  
+						
+				
+        }  
+    </tbody>  
+</table> 

@@ -1,0 +1,70 @@
+@page
+@model ChicagoAreasGuideModel
+@{
+  ViewData["Title"] = "Chicago Areas Crime Overview";
+}
+
+<h2>Here you can view areas and compare crime distributions throughout the city.</h2>  
+
+@{
+   if (@Model.EX != null)
+	 {
+	   <br />
+		 <br />
+		 <h3>**ERROR: @Model.EX.Message</h3>
+		 <br />
+		 <hr />
+		 <br />
+		 <br />
+	 }
+}
+
+<table class="table">  
+    <thead>  
+        <tr>  
+            <th>  
+                #
+            </th>  
+            <th>  
+                Area
+            </th>  
+            <th>  
+                Area Name
+            </th>  
+            <th>  
+                Number of Crimes
+            </th>  
+            <th>
+                Percent of Total Crimes
+            </th>  
+        </tr>  
+    </thead>  
+    <tbody>  
+				@{
+				   int rank = 1;
+				 }
+				
+        @foreach (var item in Model.ChicagoAreaList)  
+        {  
+            <tr>  
+                <td>  
+					@rank
+                </td>  
+                <td>  
+                    @item.Area
+                </td>  
+                <td>  
+                    @item.AreaName
+                </td>  
+                <td>  
+                    @item.NumAreaCrimes
+                </td>  
+                <td>  
+                    @((((@item.NumAreaCrimes)/(@item.TotalCrimes)) * 100).ToString("0.00"))
+                </td>  
+            </tr>  
+						
+					rank++;
+        }  
+    </tbody>  
+</table> 
